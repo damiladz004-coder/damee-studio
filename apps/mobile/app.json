@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Damee Studio",
+    "slug": "damee-studio",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "damee",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#030303"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#030303"
+      }
+    }
+  }
+}

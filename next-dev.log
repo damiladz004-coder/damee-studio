@@ -1,0 +1,13 @@
+
+> damee-studio@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.1.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.135.1:3000
+- Environments: .env.local
+
+✓ Starting...
+Creating turbopack project { dir: 'C:\\Users\\damil\\damee-studio', testMode: true }
+✓ Finished writing to filesystem cache in 24.5s
+✓ Ready in 50s
