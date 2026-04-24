@@ -1,4 +1,4 @@
-import type { ComicPage, ContentItem } from "./types";
+import type { ComicIssue, ComicPage, ContentItem } from "./types";
 
 export const featuredContent: ContentItem[] = [
   {
@@ -62,8 +62,25 @@ export const demoComicPages: ComicPage[] = [
   },
 ];
 
+export const demoComicIssues: ComicIssue[] = [
+  {
+    id: "issue-eagles-watch-1",
+    comic_id: "comic-eagles-watch",
+    title: "Signal Under Lagos",
+    slug: "signal-under-lagos",
+    issue_number: 1,
+    summary: "The first signal is found beneath the mainland and everything changes.",
+    price_naira: 2000,
+    status: "published",
+    release_date: "2026-04-24T00:00:00.000Z",
+  },
+];
+
 export const getDemoByKind = (kind: ContentItem["kind"]) =>
   featuredContent.filter((item) => item.kind === kind);
 
 export const getDemoBySlug = (slug: string) =>
   featuredContent.find((item) => item.slug === slug);
+
+export const getDemoIssuesByComicId = (comicId: string) =>
+  demoComicIssues.filter((issue) => issue.comic_id === comicId);

@@ -37,21 +37,6 @@ export default function AuthForm({ title, buttonText, mode }: AuthFormProps) {
       return;
     }
 
-    if (mode === "signup" && referral) {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      await fetch("/api/referral", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
-        },
-        body: JSON.stringify({ referralCode: referral }),
-      });
-    }
-
     router.push("/dashboard");
   }
 

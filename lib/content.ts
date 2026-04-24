@@ -1,6 +1,11 @@
-import { featuredContent, getDemoByKind, getDemoBySlug } from "./demo-data";
+import {
+  featuredContent,
+  getDemoByKind,
+  getDemoBySlug,
+  getDemoIssuesByComicId,
+} from "./demo-data";
 import { isSupabaseConfigured, supabase } from "./supabase";
-import type { ContentItem, ContentKind } from "./types";
+import type { ComicIssue, ContentItem, ContentKind } from "./types";
 
 const tableByKind: Record<ContentKind, string> = {
   comic: "comics",
@@ -49,4 +54,34 @@ export async function getContentBySlug(
   if (error || !data) return getDemoBySlug(slug) ?? null;
 
   return { ...data, kind };
+}
+
+export async function getComicIssues(comicId: string): Promise<ComicIssue[]> {
+  if (!isSupabaseConfigured) return getDemoIssuesByComicId(comicId);
+
+  const { data, error } = await supabase
+    .from("comic_issues")
+    .select("*")
+    .eq("comic_id", comicId)
+    .eq("status", "published")
+    .order("issue_number", { ascending: true });
+
+  if (error || !data?.length) return getDemoIssuesByComicId(comicId);
+
+  return data;
+}
+
+export async function getPublishedComicIssues(): Promise<ComicIssue[]> {
+  if (!isSupabaseConfigured) return getDemoIssuesByComicId("comic-eagles-watch");
+
+  const { data, error } = await supabase
+    .from("comic_issues")
+    .select("*")
+    .eq("status", "published")
+    .order("release_date", { ascending: false })
+    .order("issue_number", { ascending: false });
+
+  if (error || !data?.length) return getDemoIssuesByComicId("comic-eagles-watch");
+
+  return data;
 }
