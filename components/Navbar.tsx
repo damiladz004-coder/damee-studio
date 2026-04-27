@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "../lib/supabase";
 
 const links = [
   ["Comics", "/comics"],
@@ -12,6 +14,27 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthenticated(Boolean(data.session));
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+      setAuthenticated(Boolean(session));
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    router.push("/");
+  }
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
@@ -29,12 +52,20 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link href="/auth/login" className="btn btn-secondary">
-            Login
-          </Link>
-          <Link href="/auth/signup" className="btn btn-primary">
-            Sign up
-          </Link>
+          {!authenticated ? (
+            <>
+              <Link href="/auth/login" className="btn btn-secondary">
+                Login
+              </Link>
+              <Link href="/auth/signup" className="btn btn-primary">
+                Sign up
+              </Link>
+            </>
+          ) : (
+            <button className="btn btn-secondary" onClick={handleSignOut}>
+              Sign out
+            </button>
+          )}
         </div>
 
         <button className="btn btn-secondary md:hidden" onClick={() => setOpen(true)}>
@@ -60,12 +91,20 @@ export default function Navbar() {
             ))}
           </div>
           <div className="mt-10 grid gap-3">
-            <Link href="/auth/login" className="btn btn-secondary">
-              Login
-            </Link>
-            <Link href="/auth/signup" className="btn btn-primary">
-              Sign up
-            </Link>
+            {!authenticated ? (
+              <>
+                <Link href="/auth/login" className="btn btn-secondary">
+                  Login
+                </Link>
+                <Link href="/auth/signup" className="btn btn-primary">
+                  Sign up
+                </Link>
+              </>
+            ) : (
+              <button className="btn btn-secondary" onClick={handleSignOut}>
+                Sign out
+              </button>
+            )}
           </div>
         </div>
       )}

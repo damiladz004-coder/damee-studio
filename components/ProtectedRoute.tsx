@@ -13,8 +13,8 @@ export default function ProtectedRoute({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) {
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) {
         router.push("/auth/login");
         return;
       }
